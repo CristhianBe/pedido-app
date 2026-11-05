@@ -34,12 +34,20 @@ import { ref } from 'vue';
 import { Posts } from '@/interfaces/posts';
 
 import { useRoute } from 'vue-router';
+import { buscarPostCreado } from '@/stores/postsCreados';
 
 const route = useRoute();
 
 const post = ref<Posts | null>(null);
 
 function cargarPost(){
+
+  // Si es un post creado en la app, no está en la API
+  const creado = buscarPostCreado(Number(route.params.id));
+  if (creado) {
+    post.value = creado;
+    return;
+  }
 
   fetch('https://jsonplaceholder.typicode.com/posts/' + route.params.id)
   .then(response => response.json())

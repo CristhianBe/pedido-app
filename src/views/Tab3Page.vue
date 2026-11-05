@@ -76,6 +76,7 @@ import {
 import { qrCodeOutline } from 'ionicons/icons';
 import { CapacitorBarcodeScanner, CapacitorBarcodeScannerTypeHint } from '@capacitor/barcode-scanner';
 import { ref } from 'vue';
+import { agregarPostCreado } from '@/stores/postsCreados';
 
 // userId en null hasta que el usuario lo seleccione
 type NuevoPost = Omit<Posts, 'id' | 'userId'> & { userId: number | null };
@@ -217,7 +218,12 @@ async function guardarPost() {
 
     const json: Posts = await response.json();
     console.log(json);
-    mostrarToast(`Post creado #${json.id}`);
+    const guardado = agregarPostCreado({
+      userId: post.value.userId as number,
+      title: post.value.title,
+      body: post.value.body,
+    });
+    mostrarToast(`Post creado #${guardado.id}`);
     post.value = postVacio();
   } catch (error) {
     console.log(error);
