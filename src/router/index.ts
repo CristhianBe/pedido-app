@@ -30,6 +30,14 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/users/:id',
+    component: () => import('@/views/Users/UserPage.vue'),
+  },
+  {
+    path: '/posts/:id',
+    component: () => import('@/views/Posts/PostPage.vue'),
+  }
 ];
 
 const router = createRouter({
