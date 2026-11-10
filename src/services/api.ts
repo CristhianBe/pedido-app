@@ -50,3 +50,26 @@ export function mensajeDeError(error: unknown): string {
   if (error.status === 429) return 'Demasiados intentos. Espera un momento.';
   return error.cuerpo?.message ?? `Error del servidor (${error.status})`;
 }
+
+// Prueba varias rutas en orden y usa la primera que exista (salta los 404 y 405).
+// Guarda la que funcionó para no volver a probar.
+const rutasEncontradas: Record<string, string> = {};
+
+export async function apiPrimeraRuta<T>(nombre: string, rutas: string[], op: RequestInit = {}): Promise<T> {
+  const lista = rutasEncontradas[nombre] ? [rutasEncontradas[nombre]] : rutas;
+  let ultimoError: unknown;
+  for (const ruta of lista) {
+    try {
+      const r = await api<T>(ruta, op);
+      rutasEncontradas[nombre] = ruta;
+      console.log(`Ruta de ${nombre}: ${ruta}`);
+      return r;
+    } catch (e) {
+      ultimoError = e;
+      if (e instanceof ErrorApi && (e.status === 404 || e.status === 405)) continue;
+      rutasEncontradas[nombre] = ruta;
+      throw e;
+    }
+  }
+  throw ultimoError;
+}

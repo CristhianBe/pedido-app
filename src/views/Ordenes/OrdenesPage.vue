@@ -90,10 +90,10 @@ import {
 import { logOutOutline } from 'ionicons/icons';
 import { ref, watch } from 'vue';
 import { useAuth } from '@/composables/useAuth';
-import { api, mensajeDeError } from '@/services/api';
+import { apiPrimeraRuta, mensajeDeError } from '@/services/api';
 
-// Ruta de las órdenes en la API (cámbiala si el profe usa otra, p. ej. '/orders')
-const RUTA_ORDENES = '/ordenes';
+// Rutas posibles de las órdenes: se usa la primera que exista en la API
+const RUTAS_ORDENES = ['/ordenes', '/orders', '/v1/orders', '/v1/ordenes', '/pedidos', '/orden'];
 
 type Orden = { id: number | string; [clave: string]: unknown };
 
@@ -126,7 +126,7 @@ async function cargarOrdenes() {
   error.value = '';
   cargando.value = true;
   try {
-    const r = await api<any>(RUTA_ORDENES);
+    const r = await apiPrimeraRuta<any>('ordenes', RUTAS_ORDENES);
     // Acepta un arreglo directo o paginado { data: [...] }
     ordenes.value = Array.isArray(r) ? r : (r?.data ?? []);
   } catch (e) {
@@ -144,7 +144,7 @@ async function refrescar(evento: CustomEvent) {
 
 async function salir() {
   try {
-    await api('/logout', { method: 'POST' });
+    await apiPrimeraRuta('logout', ['/logout', '/auth/logout', '/v1/logout'], { method: 'POST' });
   } catch {
     // aunque falle en el servidor, se borra el token local
   }

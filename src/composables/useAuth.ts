@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue';
-import { api } from '@/services/api';
+import { apiPrimeraRuta } from '@/services/api';
 import { almacenSeguro } from '@/services/almacenSeguro';
 
 // Fuera de la función: todas las vistas comparten el mismo token
@@ -7,7 +7,7 @@ const token = ref<string | null>(null);
 
 export function useAuth() {
   async function login(email: string, password: string) {
-    const r = await api<any>('/login', {
+    const r = await apiPrimeraRuta<any>('login', ['/login', '/auth/login', '/sanctum/token', '/v1/login', '/v1/auth/login', '/token', '/tokens/create'], {
       method: 'POST',
       body: JSON.stringify({ email, password, device_name: 'app-movil' }),
     });
