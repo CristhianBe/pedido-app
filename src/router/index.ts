@@ -28,6 +28,10 @@ const routes: RouteRecordRaw[] = [
         path: 'tab3',
         component: () => import('@/views/Tab3Page.vue'),
       },
+      {
+        path: 'ordenes',
+        component: () => import('@/views/Ordenes/OrdenesPage.vue'),
+      },
     ],
   },
   {

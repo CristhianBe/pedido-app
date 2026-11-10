@@ -17,6 +17,11 @@
           <ion-icon aria-hidden="true" :icon="createOutline" />
           <ion-label>Nuevo post</ion-label>
         </ion-tab-button>
+
+        <ion-tab-button tab="ordenes" href="/tabs/ordenes">
+          <ion-icon aria-hidden="true" :icon="receiptOutline" />
+          <ion-label>Órdenes</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   </ion-page>
@@ -24,5 +29,5 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { createOutline, people, documentText } from 'ionicons/icons';
+import { createOutline, people, documentText, receiptOutline } from 'ionicons/icons';
 </script>
